@@ -1,6 +1,6 @@
 import type { CommandsRegistry } from "./commands/commands.js";
 import { registerCommand, runCommand } from "./commands/commands.js";
-import { handlerLogin, handlerRegister, handlerReset } from "./commands/users.js";
+import { handlerListUsers, handlerLogin, handlerRegister, handlerReset } from "./commands/users.js";
 
 async function main() {
   
@@ -8,11 +8,11 @@ async function main() {
   registerCommand(comRegistry, "login", handlerLogin);
   registerCommand(comRegistry, "register", handlerRegister);
   registerCommand(comRegistry, "reset", handlerReset);
+  registerCommand(comRegistry, "users", handlerListUsers);
   const [command, args] = processInput(process.argv);
   try {
     await runCommand(comRegistry, command, args);
   } catch (err) {
-    console.log("eeee laia");
     console.log((err as Error).message);
     process.exit(1);
   }

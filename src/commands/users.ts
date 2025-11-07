@@ -1,6 +1,6 @@
 //import { createUser } from "src/db/queries/users.js";
-import { createUser, getUserByName, resetUsers } from "../db/queries/users.js";
-import { setUser } from "../config.js";
+import { createUser, getUserByName, getUsers, resetUsers } from "../db/queries/users.js";
+import { readConfig, setUser } from "../config.js";
 
 export async function handlerLogin(cmdName: string, ...args: string[]): Promise<void> {
   const [userName, others] = splitInput(args, cmdName);
@@ -41,4 +41,16 @@ function splitInput(receivedArgs: string[], cmdName: string): string[] {
     process.exit(1);
   }
   return [arg, _];
+}
+
+export async function handlerListUsers(cmdName: string, ...args: string[]): Promise<void> {
+  const usersList = await getUsers();
+  const currentUser = readConfig().currentUserName;
+  for (const user of usersList) {
+    if (user.name === currentUser){
+      console.log(`* ${user.name} (current)`);
+    } else {
+      console.log(`* ${user.name}`);
+    }
+  }
 }
