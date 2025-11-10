@@ -36,7 +36,7 @@ export async function handlerReset(cmdName: string, ...args: string[]): Promise<
 function splitInput(receivedArgs: string[], cmdName: string): string[] {
   
   const [arg, _] = receivedArgs;
-  if (!arg){
+  if (!arg) {
     console.log(`You need to provide at least one argument for command ${cmdName}.`);
     process.exit(1);
   }
