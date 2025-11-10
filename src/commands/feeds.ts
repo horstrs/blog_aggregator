@@ -1,7 +1,7 @@
 import { createFeed, getFeeds } from "../lib/db/queries/feeds.js";
 import { readConfig } from "../config.js";
 import { getUserById, getUserByName } from "../lib/db/queries/users.js";
-import { Feed, User } from "../lib/db/schema.js";
+import { Feed, feeds, User } from "../lib/db/schema.js";
 
 export async function handlerAddFeed(cmdName: string, ...args: string[]): Promise<void> {
   const [name, url] = splitInput(args, cmdName);
@@ -16,9 +16,15 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]): Promis
 
 export async function handlerListFeeds(cmdName: string, ...args: string[]): Promise<void> {
   const allFeeds = await getFeeds();
+  if (allFeeds.length === 0) {
+    console.log("No feeds found");
+    return;
+  }
+  console.log(`Found ${allFeeds.length}:`)
   for (const feed of allFeeds) {
     const user = await getUserById(feed.userId);
     printFeed(feed, user);
+    console.log("============================");
   }
 }
 
