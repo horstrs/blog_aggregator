@@ -1,7 +1,8 @@
-import { createFeed, getFeeds } from "../lib/db/queries/feeds.js";
+import { createFeed, getFeedByUrl, getFeeds } from "../lib/db/queries/feeds.js";
 import { readConfig } from "../config.js";
 import { getUserById, getUserByName } from "../lib/db/queries/users.js";
-import { Feed, feeds, User } from "../lib/db/schema.js";
+import { Feed, User } from "../lib/db/schema.js";
+import { createFeedFollow, getFeedFollowsByUserId } from "../lib/db/queries/feedFollow.js";
 
 export async function handlerAddFeed(cmdName: string, ...args: string[]): Promise<void> {
   const [name, url] = splitInput(args, cmdName);
@@ -11,6 +12,7 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]): Promis
   if(!createdFeed) {
     throw new Error("Error when creating the feed");
   }
+  await createFeedFollow(currentUser.id, createdFeed.id);
   printFeed(createdFeed, currentUser);
 }
 
@@ -25,6 +27,25 @@ export async function handlerListFeeds(cmdName: string, ...args: string[]): Prom
     const user = await getUserById(feed.userId);
     printFeed(feed, user);
     console.log("============================");
+  }
+}
+
+export async function handlerFollow(cmdName: string, ...args: string[]): Promise<void> {
+  if(!args[0]){
+    throw new Error("Expected one URL to follow");
+  }
+  const feedToFollow = await getFeedByUrl(args[0]);
+  const currentUser = await getUserByName(readConfig().currentUserName);
+  
+  const newFollow = await createFeedFollow(currentUser.id, feedToFollow.id);
+  console.log(newFollow);
+}
+
+export async function handlerFollowing(cmdName: string, ...args: string[]): Promise<void> {
+  const currentUser = await getUserByName(readConfig().currentUserName);
+  const feedsFollowing = await getFeedFollowsByUserId(currentUser.id);
+  for (const feed of feedsFollowing){
+    console.log(feed.feedName);
   }
 }
 

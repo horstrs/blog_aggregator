@@ -7,7 +7,7 @@ export async function handlerLogin(cmdName: string, ...args: string[]): Promise<
     throw new Error("Login command expects exactly one argument")
   }
   const existingUser = await getUserByName(userName)
-  if (existingUser){
+  if (!existingUser){
     throw new Error(`User ${userName} not found`)
   }
   setUser(userName);

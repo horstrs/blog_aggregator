@@ -15,6 +15,13 @@
       "when": 1762786896646,
       "tag": "0001_gigantic_guardian",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762792191625,
+      "tag": "0002_cute_cargill",
+      "breakpoints": true
     }
   ]
 }

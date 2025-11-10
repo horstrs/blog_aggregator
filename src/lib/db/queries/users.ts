@@ -22,5 +22,5 @@ export async function resetUsers() {
 }
 
 export async function getUsers() {
-  return db.select().from(users);
+  return await db.select().from(users);
 }
