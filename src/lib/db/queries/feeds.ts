@@ -8,3 +8,7 @@ export async function createFeed(name: string, url: string, userId: string) {
     userId: userId }).returning();
   return result;
 }
+
+export async function getFeeds() {
+  return await db.select().from(feeds);
+}

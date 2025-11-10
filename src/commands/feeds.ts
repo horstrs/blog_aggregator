@@ -1,6 +1,6 @@
-import { createFeed } from "../lib/db/queries/feeds.js";
+import { createFeed, getFeeds } from "../lib/db/queries/feeds.js";
 import { readConfig } from "../config.js";
-import { getUserByName } from "../lib/db/queries/users.js";
+import { getUserById, getUserByName } from "../lib/db/queries/users.js";
 import { Feed, User } from "../lib/db/schema.js";
 
 export async function handlerAddFeed(cmdName: string, ...args: string[]): Promise<void> {
@@ -12,6 +12,14 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]): Promis
     throw new Error("Error when creating the feed");
   }
   printFeed(createdFeed, currentUser);
+}
+
+export async function handlerListFeeds(cmdName: string, ...args: string[]): Promise<void> {
+  const allFeeds = await getFeeds();
+  for (const feed of allFeeds) {
+    const user = await getUserById(feed.userId);
+    printFeed(feed, user);
+  }
 }
 
 function splitInput(receivedArgs: string[], cmdName: string): string[] {
