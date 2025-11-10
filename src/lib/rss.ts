@@ -1,6 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 
-type RSSFeed = {
+export type RSSFeed = {
   channel: {
     title: string;
     link: string;
@@ -9,14 +9,14 @@ type RSSFeed = {
   };
 };
 
-type RSSItem = {
+export type RSSItem = {
   title: string;
   link: string;
   description: string;
   pubDate: string;
 };
 
-async function fetchFeed(feedURL: string) {
+export async function fetchFeed(feedURL: string) {
   const response = await fetch(feedURL, {
     headers: { "User-Agent": "gator" }
   });
@@ -92,25 +92,4 @@ function verifyAndConvertItemFields(parsedItem: any): undefined | RSSItem {
     description: parsedItem.description,
     pubDate: parsedItem.pubDate,
   }
-}
-
-/*function splitInput(receivedArgs: string[], cmdName: string): string[] {
-  const [arg, _] = receivedArgs;
-  if (!arg) {
-    console.log(`You need to provide at least one argument for command ${cmdName}.`);
-    process.exit(1);
-  }
-  return [arg, _];
-}*/
-
-export async function handlerAgg(cmdName: string, ...args: string[]): Promise<void> {
-  /*const [linkToFetch, others] = splitInput(args, cmdName);
-  if (!linkToFetch || others) {
-    throw new Error("Agg command expects exactly one argument")
-  }*/
-  const feedData = await fetchFeed("https://www.wagslane.dev/index.xml");
-  const feedDataStr = JSON.stringify(feedData, null, 2);
-  
-  console.log(feedDataStr);
-  
 }
