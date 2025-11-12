@@ -1,8 +1,9 @@
 import { getFeedFollowsByUserId } from "../lib/db/queries/feedFollow.js";
-import { User } from "../lib/db/schema.js";
+import { Feed, NewPost, User } from "../lib/db/schema.js";
 import { fetchFeed } from "../lib/rss.js"
 import { getNextFeedToFetch, makrFeedFetched } from "../lib/db/queries/feeds.js";
 import { parseDuration } from "../lib/time.js";
+import { createPost } from "src/lib/db/queries/posts.js";
 
 
 export async function handlerAgg(cmdName: string, user: User, ...args: string[]): Promise<void> {
@@ -46,11 +47,27 @@ async function scrapeFeeds(user: User) {
     return;
   }
   console.log("Found a feed to fetch");
-  await makrFeedFetched(nextFeedToFetch.id);
-  const feedData = await fetchFeed(nextFeedToFetch.url);
+  scrapeFeed(nextFeedToFetch);
+}
+
+async function scrapeFeed(feed: Feed) {
+  await makrFeedFetched(feed.id);
+  const feedData = await fetchFeed(feed.url);
   console.log(`Feed ${feedData.channel.title} collected, ${feedData.channel.item.length} posts found`);
   for (const item of feedData.channel.item) {
-    console.log(item.title);
+    console.log(`Found post: ${item.title}`);
+
+    const now = new Date();
+
+    await createPost({
+      url: item.link,
+      feedId: feed.id,
+      title: item.title,
+      createdAt: now,
+      updatedAt: now,
+      description: item.description,
+      publishedAt: new Date(item.pubDate),
+    } satisfies NewPost);
   }
 }
 

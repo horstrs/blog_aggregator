@@ -4,6 +4,7 @@ import { middlewareLoggedIn } from "./commands/middleware.js";
 import { handlerAgg } from "./commands/aggregate.js";
 import { handlerListUsers, handlerLogin, handlerRegister, handlerReset } from "./commands/users.js";
 import { handlerAddFeed, handlerListFeeds, handlerFollow, handlerFollowing, handlerUnfollow } from "./commands/feeds.js";
+import { handlerBrowse } from "./commands/browse.js";
 
 async function main() {
 
@@ -18,6 +19,7 @@ async function main() {
   registerCommand(comRegistry, "follow", middlewareLoggedIn(handlerFollow));
   registerCommand(comRegistry, "following", middlewareLoggedIn(handlerFollowing));
   registerCommand(comRegistry, "unfollow", middlewareLoggedIn(handlerUnfollow));
+  registerCommand(comRegistry, "browse", middlewareLoggedIn(handlerBrowse));
   const [command, ...args] = processInput(process.argv);
   try {
     await runCommand(comRegistry, command, ...args);
