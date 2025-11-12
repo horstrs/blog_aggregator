@@ -12,7 +12,7 @@ async function main() {
   registerCommand(comRegistry, "register", handlerRegister);
   registerCommand(comRegistry, "reset", handlerReset);
   registerCommand(comRegistry, "users", handlerListUsers);
-  registerCommand(comRegistry, "agg", handlerAgg);
+  registerCommand(comRegistry, "agg", middlewareLoggedIn(handlerAgg));
   registerCommand(comRegistry, "feeds", handlerListFeeds);
   registerCommand(comRegistry, "addfeed", middlewareLoggedIn(handlerAddFeed));
   registerCommand(comRegistry, "follow", middlewareLoggedIn(handlerFollow));

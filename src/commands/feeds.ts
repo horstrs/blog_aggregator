@@ -35,7 +35,10 @@ export async function handlerFollow(cmdName: string, user: User, ...args: string
     throw new Error("Expected one URL to follow");
   }
   const feedToFollow = await getFeedByUrl(args[0]);
-
+  if(!feedToFollow){
+    console.log(`Could not find feed with URL ${args[0]}`);
+  }
+  
   const newFollow = await createFeedFollow(user.id, feedToFollow.id);
   console.log(newFollow);
 }
