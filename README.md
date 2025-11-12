@@ -1,4 +1,4 @@
-Gator is an RSS feed aggre**gator** is a guided project for practicing basics of HTTP commands and DB using drizzle.
+Gator is an RSS feed aggre **gator** is a guided project for practicing basics of HTTP commands and DB using drizzle.
 To store the feeds and users, this project uses a Postgres DB. The access URL is stored in a JSON config file name .gatorconfig.json in your home directory. This config file needs two fields:
 {
   "db_url": "postgres://<your_user>:@localhost:5432/gator?sslmode=disable",
